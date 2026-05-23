@@ -1,0 +1,6 @@
+Nếu thiếu module thì nhập:
+pip install -r requirements.txt
+Cài Visual Build Tools 2026
+
+Bật môi trường ảo
+.venv\Scripts\activate

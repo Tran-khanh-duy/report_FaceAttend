@@ -1,0 +1,194 @@
+# =============================================================================
+#  .gitignore — FaceAttend AI System (Server + Edge/MiniPC)
+#  Mục tiêu: Push bản đầy đủ nhất có thể lên Git.
+#  Chỉ loại trừ: secret keys, binary model, runtime artifacts, và file rác hệ điều hành.
+# =============================================================================
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  1. BÍ MẬT / CREDENTIALS  — KHÔNG BAO GIỜ push các file này lên!
+# ─────────────────────────────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example          # Cho phép file mẫu không chứa secret thật
+secrets.json
+credentials.json
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+service_account*.json
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  2. PYTHON RUNTIME — Không cần push, tái tạo qua pip install
+# ─────────────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+.python-version
+.ipynb_checkpoints/
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+pip-log.txt
+pip-delete-this-directory.txt
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  3. VIRTUAL ENVIRONMENTS — Push requirements.txt thay thế
+# ─────────────────────────────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+env_face/
+Lib/
+Scripts/
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  4. AI MODEL WEIGHTS — Quá nặng cho GitHub (>100MB bị chặn).
+#     Dùng Git LFS hoặc chia sẻ qua Drive/Hugging Face Hub riêng.
+# ─────────────────────────────────────────────────────────────────────────────
+*.onnx
+*.pt
+*.pth
+*.h5
+*.hdf5
+*.pb
+*.tflite
+*.ptl
+*.weights
+*.bin
+*.dat
+*.caffemodel
+*.prototxt.bak
+
+# Thư mục models trong bất kỳ subproject nào (Server, MINI_PC, ...)
+models/
+**/models/
+
+# Silent Face Anti-Spoofing: chỉ push code, không push weights đã train
+Silent-Face-Anti-Spoofing-master/resources/anti_spoof_models/
+Silent-Face-Anti-Spoofing-master/**/*.onnx
+Silent-Face-Anti-Spoofing-master/**/*.pth
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  5. DATABASE — Chỉ push schema migration (alembic/versions/), không push data
+# ─────────────────────────────────────────────────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+*.mdf
+*.ldf
+database/local_buffer.db
+face_attendance.db
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  6. DỮ LIỆU RUNTIME (Sinh ra khi chạy — không phải mã nguồn)
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Ảnh snapshot điểm danh và ảnh khuôn mặt học viên
+assets/snapshots/
+assets/profiles/
+**/assets/snapshots/
+**/assets/profiles/
+
+# Cache embedding local của MiniPC (tái tải từ Server khi cần)
+MINI_PC/local_cache/*.pkl
+MINI_PC/local_cache/*.npy
+MINI_PC/local_cache/*.npz
+MINI_PC/local_cache/embeddings/
+
+# Report xuất ra (tái sinh từ DB)
+reports/
+**/reports/
+
+# Nhưng GIỮ LẠI icon ứng dụng
+!assets/app_icon.png
+!**/assets/app_icon.png
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  7. LOG FILES — Không push log runtime
+# ─────────────────────────────────────────────────────────────────────────────
+logs/
+**/logs/
+*.log
+*.log.*
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  8. NÉN / ARCHIVE
+# ─────────────────────────────────────────────────────────────────────────────
+*.zip
+*.tar
+*.tar.gz
+*.gz
+*.7z
+*.rar
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  9. HỆ ĐIỀU HÀNH & IDE
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# VS Code (bỏ qua setting cá nhân, giữ lại extensions.json nếu có)
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
+
+# JetBrains (PyCharm, etc.)
+.idea/
+
+# Visual Studio
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  10. FILE TẠM / SCRATCH (Thư mục dùng để test cục bộ)
+# ─────────────────────────────────────────────────────────────────────────────
+scratch/
+**/scratch/
+temp/
+tmp/
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  CÁC FILE ĐƯỢC PHÉP PUSH (ghi rõ để tránh nhầm)
+# ─────────────────────────────────────────────────────────────────────────────
+# ✅ Toàn bộ mã nguồn Python (.py)
+# ✅ requirements.txt (Server + MINI_PC)
+# ✅ alembic/ — schema migration
+# ✅ .env.example — file mẫu biến môi trường (không chứa secret thật)
+# ✅ *.bat — script khởi động
+# ✅ *.md — tài liệu
+# ✅ Dockerfile, docker-compose.yml
+# ✅ alembic.ini
+# ✅ assets/app_icon.png
